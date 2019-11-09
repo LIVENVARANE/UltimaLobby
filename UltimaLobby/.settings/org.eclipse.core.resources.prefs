@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//src/config.yml=UTF-8
+encoding//src/fr/groupeultima/org/Commands/UltimaLobbyCommand.java=UTF-8
+encoding//src/fr/groupeultima/org/Listener/joinLeave.java=UTF-8
+encoding//src/fr/groupeultima/org/Listener/lobbyItems.java=UTF-8
+encoding//src/fr/groupeultima/org/Tasks/UltimaScoreboards.java=UTF-8

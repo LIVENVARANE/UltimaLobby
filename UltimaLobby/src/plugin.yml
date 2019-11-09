@@ -1,0 +1,17 @@
+name: UltimaLobby
+
+version: 0.1
+
+description: All hub services.
+
+authors: [Thalrod, Liven]
+
+api-version: 1.14
+
+main: fr.groupeultima.org.UltimaLobby
+
+commands:
+  ultimalobby:
+    permission: op
+    aliases: ul
+    description: Main command of the plugin.
