@@ -1,0 +1,37 @@
+Bossbar:
+  LobbyBossbar:
+    text1: "&3Bienvenue sur &b&lUltima&r&3!"           #To remove a bar, just change text value to -1
+    color1: "BLUE"           #Colors must be "BLUE", "GREEN", "PURPLE", "RED", "PINK", "YELLOW", "WHITE"
+    style1: "SOLID"           #STYLE MUST BE "SEGMENTED_10", "SEGMENTED_12", "SEGMENTED_6", "SEGMENTED_20", "SOLID"
+    
+    text2: "&a&lPROMO OUVERTURE&r&a: &2&l-50% &r&2sur &nTOUTE&r &2 la boutique!"
+    color2: "GREEN"
+    style2: "SEGMENTED_10"
+    
+    text3: "&5Si vous avez une &lquestion&r&5, faites &l/support&r&5!"
+    color3: "PURPLE"
+    style3: "SEGMENTED_6"
+    
+    text4: "&6&lAstuce&r&6: &ePour jouer, utilisez la boussole"
+    color4: "YELLOW"
+    style4: "SEGMENTED_20"
+    
+    text5: "&lSi ce n'est pas encore fait, liez votre compte &bMinecraft &fà votre compte &bUltima &fpour recevoir &6&l1000 Tokens!"
+    color5: "WHITE"
+    style5: "SEGMENTED_12"
+    
+Chat:
+  Everywhere:
+    text1: -1 # "&a&lPROMO OUVERTURE&r&a: &2&l-50% &r&2sur &nTOUTE&r &2 la boutique!"           #To remove a message, just change text value to -1
+    decoration1: 1           #1= add \______/ brefore and after the message, 0= no decoration
+    text2: -1 # "texte 2texte 2texte 2texte 2texte 2texte 2texte 2texte 2texte 2texte 2texte 2"
+    decoration2: 1
+    text3: -1 # "&3Un &ntricheur&r&3? Quelqu'un qui ne respecte pas les règles? &bNe vous énervez pas et faites &9&l/report&r&b!"
+    decoration3: 1
+    text4: -1 # "texte 4"
+    decoration4: 1
+    text5: -1 # "texte 5 texte 5 texte 5 texte 5 texte 5 texte 5 texte 5 texte 5 texte 5 texte 5 "
+    decoration5: 1
+    
+ServerMOTD:
+  text: "&e&km &7⋙ &b&lUltima &3⋙ &3-50% sur la boutique!\nb&7&l⋙ &eRushFFA &7⋙ &aFFA &7⋙ &5Sumo &r&6et plus !"
