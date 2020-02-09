@@ -17,6 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import fr.groupeultima.Library.IdentityCard.Identity;
+import fr.groupeultima.Library.IdentityCard.Enum.Games;
 import fr.groupeultima.org.UltimaLobby;
 import net.md_5.bungee.api.ChatColor;
 
@@ -169,14 +171,32 @@ public class lobbyItems implements Listener {
 	// SHOP INV
 	public static Inventory shopInv = Bukkit.createInventory(null, 9, ChatColor.BLUE + "Ultima " + ChatColor.GRAY + "→ " + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Boutique");
 	static {
-		// creating comparator item
+		// creating chestplate item
 		ItemStack shopInvChestplate = new ItemStack(Material.DIAMOND_CHESTPLATE);
 		ItemMeta shopInvRanks = shopInvChestplate.getItemMeta();
-		shopInvRanks.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Grades " + ChatColor.MAGIC + "aa" + ChatColor.RESET + "" + ChatColor.GOLD + " (-50%)");
+		shopInvRanks.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Grades " + ChatColor.RESET + "" + ChatColor.GOLD + " (-50%)");
 		List<String> ranksLore = new ArrayList<String>();
 		ranksLore.add(ChatColor.BLUE + "Ouvrir la catégorie des grades");
 		shopInvRanks.setLore(ranksLore);
 		shopInvChestplate.setItemMeta(shopInvRanks);
+		
+		//creating gold ingot item
+		ItemStack shopInvGIngot = new ItemStack(Material.GOLD_INGOT);
+		ItemMeta shopInvTokens = shopInvGIngot.getItemMeta();
+		shopInvTokens.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Tokens " + ChatColor.RESET + "" + ChatColor.GOLD + " (-50%)");
+		List<String> tokenLore = new ArrayList<String>();
+		tokenLore.add(ChatColor.BLUE + "Ouvrir la catégorie des tokens");
+		shopInvTokens.setLore(tokenLore);
+		shopInvGIngot.setItemMeta(shopInvTokens);
+		
+		//creating xp bottle item
+		ItemStack shopInvXPBottle = new ItemStack(Material.EXPERIENCE_BOTTLE);
+		ItemMeta shopInvCosm = shopInvXPBottle.getItemMeta();
+		shopInvCosm.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Cosmétiques " + ChatColor.RESET + "" + ChatColor.GOLD + " (-50%)");
+		List<String> cosmLore = new ArrayList<String>();
+		cosmLore.add(ChatColor.BLUE + "Ouvrir la catégorie des tokens");
+		shopInvCosm.setLore(cosmLore);
+		shopInvXPBottle.setItemMeta(shopInvCosm);
 		
 		// creating door item
 		ItemStack menuInvDoor = new ItemStack(Material.SPRUCE_DOOR);
@@ -185,7 +205,9 @@ public class lobbyItems implements Listener {
 		menuInvDoor.setItemMeta(menuInvLeave);
 		
 		// adding items
+		shopInv.setItem(3, shopInvXPBottle);
 		shopInv.setItem(4, shopInvChestplate);
+		shopInv.setItem(5, shopInvGIngot);
 		shopInv.setItem(8, menuInvDoor);
 	}
 	
@@ -340,18 +362,244 @@ public class lobbyItems implements Listener {
 		}
 		
 	// ACCOUNT INV
-			public static Inventory accountInv = Bukkit.createInventory(null, 9, ChatColor.BLUE + "Ultima " + ChatColor.GRAY + "→ " + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Mon compte");
-			static {
+	private void openAccountInv(Player e) {
+		Inventory accountInv = Bukkit.createInventory(null, 9, ChatColor.BLUE + "Ultima " + ChatColor.GRAY + "→ " + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Mon compte");
 				
-				// creating door item
-				ItemStack menuInvDoor = new ItemStack(Material.SPRUCE_DOOR);
-				ItemMeta menuInvLeave = menuInvDoor.getItemMeta();
-				menuInvLeave.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Quitter le menu");
-				menuInvDoor.setItemMeta(menuInvLeave);
-					
-				// adding items
-				accountInv.setItem(8, menuInvDoor);
-				}
+		ItemStack accountInvPaper = new ItemStack(Material.PAPER);
+		ItemMeta accountInvStats = accountInvPaper.getItemMeta();
+		accountInvStats.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Statistiques");
+		List<String> paperLore = new ArrayList<String>();
+		paperLore.add(ChatColor.BLUE + "Voir vos statistiques de jeu.");
+		accountInvStats.setLore(paperLore);
+		accountInvPaper.setItemMeta(accountInvStats);
+		
+		ItemStack accountInvfriendsHead = new ItemStack(Material.PLAYER_HEAD);
+		final Player player = Bukkit.getServer().getPlayer(e.getPlayer().getName());
+		SkullMeta fHim = (SkullMeta) accountInvfriendsHead.getItemMeta();
+		fHim.setOwningPlayer(player);
+		fHim.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Mes amis");
+		accountInvfriendsHead.setItemMeta(fHim);
+		
+		// creating door item
+		ItemStack menuInvDoor = new ItemStack(Material.SPRUCE_DOOR);
+		ItemMeta menuInvLeave = menuInvDoor.getItemMeta();
+		menuInvLeave.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Quitter le menu");
+		menuInvDoor.setItemMeta(menuInvLeave);
+			
+		// adding items
+		accountInv.setItem(3, accountInvfriendsHead);
+		accountInv.setItem(5, accountInvPaper);
+		accountInv.setItem(8, menuInvDoor);
+		
+		e.getPlayer().openInventory(accountInv);
+	}
+	
+	//STATS INV
+	private void openStatsInv(Player e) {
+		Inventory statsInv = Bukkit.createInventory(null, 9, ChatColor.BLUE + "U.. " + ChatColor.GRAY + "→ " + ChatColor.BLUE + "Mon compte " + ChatColor.GRAY + "→ " + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Statistiques");
+		
+		Identity player_info = new Identity();
+		
+		// creating sandstone item
+		ItemStack StatsInvSandstone = new ItemStack(Material.CUT_SANDSTONE);
+		ItemMeta gamesInvRushFFA = StatsInvSandstone.getItemMeta();
+		gamesInvRushFFA.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Statistiques RushFFA");
+		List<String> rushffaLore = new ArrayList<String>();
+		rushffaLore.add(" ");
+		if(player_info.getKill(e.getUniqueId(), Games.RushOriginal) == 1) {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Kills (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getKill(e.getUniqueId(), Games.RushOriginal) + " kill");
+
+		}
+		else {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Kills (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getKill(e.getUniqueId(), Games.RushOriginal) + " kills");
+
+		}
+		if(player_info.getKill(e.getUniqueId(), Games.RushffaDeluxe) == 1) {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Kills (Deluxe): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getKill(e.getUniqueId(), Games.RushffaDeluxe) + " kill");
+
+		}
+		else {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Kills (Deluxe): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getKill(e.getUniqueId(), Games.RushffaDeluxe) + " kills");
+
+		}
+		if(player_info.getDeath(e.getUniqueId(), Games.RushOriginal) == 1) {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Morts (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getDeath(e.getUniqueId(), Games.RushOriginal) + " mort");
+
+		}
+		else {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Morts (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getDeath(e.getUniqueId(), Games.RushOriginal) + " morts");
+
+		}
+		if(player_info.getDeath(e.getUniqueId(), Games.RushffaDeluxe) == 1) {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Morts (Deluxe): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getDeath(e.getUniqueId(), Games.RushffaDeluxe) + " mort");
+
+		}
+		else {
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Morts (Deluxe): " + ChatColor.RESET + "" + ChatColor.YELLOW + player_info.getDeath(e.getUniqueId(), Games.RushffaDeluxe) + " morts");
+
+		}
+		rushffaLore.add("  ");
+		
+		int ORushFFAKills = player_info.getKill(e.getUniqueId(), Games.RushOriginal);
+		int ORushFFADeaths = player_info.getDeath(e.getUniqueId(), Games.RushOriginal);
+		
+		if(ORushFFAKills == 0) {
+			double ORushFFARatio = 0;
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Ratio (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + ORushFFARatio + " K/M");
+		}
+		else if(ORushFFADeaths == 0) {
+			double ORushFFARatio = ORushFFAKills;
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Ratio (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + ORushFFARatio + " K/M");
+		}
+		else {
+			double ORushFFARatio = ORushFFAKills / ORushFFADeaths;
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Ratio (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + ORushFFARatio + " K/M");
+		}
+		
+		int DRushFFAKills = player_info.getKill(e.getUniqueId(), Games.RushOriginal);
+		int DRushFFADeaths = player_info.getDeath(e.getUniqueId(), Games.RushOriginal);
+		
+		if(DRushFFAKills == 0) {
+			double DRushFFARatio = 0;
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Ratio (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + DRushFFARatio + " K/M");
+		}
+		else if(DRushFFADeaths == 0) {
+			double DRushFFARatio = DRushFFAKills;
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Ratio (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + DRushFFARatio + " K/M");
+		}
+		else {
+			double DRushFFARatio = DRushFFAKills / DRushFFADeaths;
+			rushffaLore.add(ChatColor.GOLD + "" + ChatColor.BOLD + "Ratio (Original): " + ChatColor.RESET + "" + ChatColor.YELLOW + DRushFFARatio + " K/M");
+		}
+		
+		gamesInvRushFFA.setLore(rushffaLore);
+		StatsInvSandstone.setItemMeta(gamesInvRushFFA);
+		
+		// creating gchest item
+		ItemStack StatsInvGChest = new ItemStack(Material.GOLDEN_CHESTPLATE);
+		ItemMeta gamesInvFFA = StatsInvGChest.getItemMeta();
+		gamesInvFFA.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Statistiques FFA");
+		List<String> ffaLore = new ArrayList<String>();
+		ffaLore.add(" ");
+		if(player_info.getKill(e.getUniqueId(), Games.ffa) == 1) {
+			ffaLore.add(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Kills: " + ChatColor.RESET + "" + ChatColor.GREEN + player_info.getKill(e.getUniqueId(), Games.ffa) + " kill");
+
+		}
+		else {
+			ffaLore.add(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Kills: " + ChatColor.RESET + "" + ChatColor.GREEN + player_info.getKill(e.getUniqueId(), Games.ffa) + " kills");
+
+		}
+		if(player_info.getDeath(e.getUniqueId(), Games.ffa) == 1) {
+			ffaLore.add(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Morts: " + ChatColor.RESET + "" + ChatColor.GREEN + player_info.getDeath(e.getUniqueId(), Games.ffa) + " mort");
+
+		}
+		else {
+			ffaLore.add(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Morts: " + ChatColor.RESET + "" + ChatColor.GREEN + player_info.getDeath(e.getUniqueId(), Games.ffa) + " morts");
+
+		}
+		ffaLore.add("  ");
+		
+		int FFAKills = player_info.getKill(e.getUniqueId(), Games.ffa);
+		int FFADeaths = player_info.getDeath(e.getUniqueId(), Games.ffa);
+		
+		if(FFAKills == 0) {
+			double FFARatio = 0;
+			ffaLore.add(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Ratio: " + ChatColor.RESET + "" + ChatColor.GREEN + FFARatio + " K/M");
+		}
+		else if(FFADeaths == 0) {
+			double FFARatio = FFAKills;
+			ffaLore.add(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Ratio: " + ChatColor.RESET + "" + ChatColor.GREEN + FFARatio + " K/M");
+		}
+		else {
+			double FFARatio = FFAKills / FFADeaths;
+			ffaLore.add(ChatColor.DARK_GREEN + "" + ChatColor.BOLD + "Ratio: " + ChatColor.RESET + "" + ChatColor.GREEN + FFARatio + " K/M");
+		}
+		
+		
+		gamesInvFFA.setLore(ffaLore);
+		StatsInvGChest.setItemMeta(gamesInvFFA);
+		
+		// creating head item
+		ItemStack statsInvHead = new ItemStack(Material.PLAYER_HEAD);
+		SkullMeta gamesInvSumo = (SkullMeta) statsInvHead.getItemMeta();
+		gamesInvSumo.setOwningPlayer(Bukkit.getServer().getOfflinePlayer("CocaCola1"));
+		gamesInvSumo.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Statistiques Sumo");
+		List<String> sumoLore = new ArrayList<String>();
+		sumoLore.add(" ");
+		if(player_info.getKill(e.getUniqueId(), Games.Sumo) == 1) {
+			sumoLore.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Kills: " + ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + player_info.getKill(e.getUniqueId(), Games.Sumo) + " kill");
+
+		}
+		else {
+			sumoLore.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Kills: " + ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + player_info.getKill(e.getUniqueId(), Games.Sumo) + " kills");
+
+		}
+		if(player_info.getDeath(e.getUniqueId(), Games.Sumo) == 1) {
+			sumoLore.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Morts: " + ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + player_info.getDeath(e.getUniqueId(), Games.Sumo) + " mort");
+
+		}
+		else {
+			sumoLore.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Morts: " + ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + player_info.getDeath(e.getUniqueId(), Games.Sumo) + " morts");
+
+		}
+		sumoLore.add("  ");
+		
+		int SumoKills = player_info.getKill(e.getUniqueId(), Games.Sumo);
+		int SumoDeaths = player_info.getDeath(e.getUniqueId(), Games.Sumo);
+		
+		if(SumoKills == 0) {
+			double SumoRatio = 0;
+			sumoLore.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Ratio: " + ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + SumoRatio + " K/M");
+		}
+		else if(SumoDeaths == 0) {
+			double SumoRatio = SumoKills;
+			sumoLore.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Ratio: " + ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + SumoRatio + " K/M");
+		}
+		else {
+			double SumoRatio = SumoKills / SumoDeaths;
+			sumoLore.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Ratio: " + ChatColor.RESET + "" + ChatColor.LIGHT_PURPLE + SumoRatio + " K/M");
+		}
+		
+		gamesInvSumo.setLore(sumoLore);
+		statsInvHead.setItemMeta(gamesInvSumo);
+		
+		ItemStack StatsInvfriendsHead = new ItemStack(Material.PLAYER_HEAD);
+		final Player player = Bukkit.getServer().getPlayer(e.getPlayer().getName());
+		SkullMeta fHim = (SkullMeta) StatsInvfriendsHead.getItemMeta();
+		fHim.setOwningPlayer(player);
+		fHim.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Statistiques globaux");
+		
+		List<String> friendsHeadLore = new ArrayList<String>();
+		friendsHeadLore.add(" ");
+		friendsHeadLore.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Pseudo: " + ChatColor.RESET + "" + ChatColor.AQUA + e.getPlayer().getName());
+		friendsHeadLore.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Date d'arrivée: " + ChatColor.RESET + "" + ChatColor.AQUA + player_info.getArrivalDate(e.getUniqueId()));
+		friendsHeadLore.add(ChatColor.AQUA + "Niveau " + player_info.getLevel(e.getUniqueId()));
+		friendsHeadLore.add("  ");
+		friendsHeadLore.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Crédits: " + ChatColor.RESET + "" + ChatColor.AQUA + player_info.getCredit(e.getUniqueId()) + "CR");
+		if(player_info.getToken(e.getUniqueId()) == 1) {
+			friendsHeadLore.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Tokens: " + ChatColor.RESET + "" + ChatColor.AQUA + player_info.getCredit(e.getUniqueId()) + "Token");
+
+		}
+		else {
+			friendsHeadLore.add(ChatColor.DARK_AQUA + "" + ChatColor.BOLD + "Tokens: " + ChatColor.RESET + "" + ChatColor.AQUA + player_info.getCredit(e.getUniqueId()) + "Tokens");
+		}
+
+		fHim.setLore(friendsHeadLore);
+		StatsInvfriendsHead.setItemMeta(fHim);
+		
+		ItemStack menuInvDoor = new ItemStack(Material.SPRUCE_DOOR);
+		ItemMeta menuInvLeave = menuInvDoor.getItemMeta();
+		menuInvLeave.setDisplayName(ChatColor.GRAY + "" + ChatColor.BOLD + "Quitter le menu");
+		menuInvDoor.setItemMeta(menuInvLeave);
+		
+		statsInv.setItem(0, StatsInvfriendsHead);
+		statsInv.setItem(3, StatsInvGChest);
+		statsInv.setItem(4, StatsInvSandstone);
+		statsInv.setItem(5, statsInvHead);
+		statsInv.setItem(8, menuInvDoor);
+		
+		e.openInventory(statsInv);
+	}
 	
 	@EventHandler
 	public void onItemClick(InventoryClickEvent e) {
@@ -472,6 +720,14 @@ public class lobbyItems implements Listener {
 			menuInvDeco.setDisplayName(ChatColor.DARK_AQUA + "*");
 			menuInvGlass.setItemMeta(menuInvDeco);
 			
+			ItemStack accountInvPaper = new ItemStack(Material.PAPER);
+			ItemMeta accountInvStats = accountInvPaper.getItemMeta();
+			accountInvStats.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Statistiques");
+			List<String> paperLore = new ArrayList<String>();
+			paperLore.add(ChatColor.BLUE + "Voir vos statistiques de jeu.");
+			accountInvStats.setLore(paperLore);
+			accountInvPaper.setItemMeta(accountInvStats);
+			
 			if(e.getCurrentItem().equals(menuCompass)) {
 				e.getWhoClicked().openInventory(menuInv);
 			}
@@ -501,9 +757,24 @@ public class lobbyItems implements Listener {
 				pl.chat("/play rushffa original");
 			}
 			else if(e.getCurrentItem().equals(friendsHead)) {
-				e.getWhoClicked().openInventory(accountInv);
+				openAccountInv((Player) e.getWhoClicked());
+			}
+			else if(e.getCurrentItem().equals(accountInvPaper)) {
+				openStatsInv((Player) e.getWhoClicked());
 			}
 			else if(e.getCurrentItem().equals(menuInvGlass)) {
+				e.setCancelled(true);
+			}
+			else if(e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.YELLOW + "" + ChatColor.BOLD + "Statistiques RushFFA")) {
+				e.setCancelled(true);
+			}
+			else if(e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.GREEN + "" + ChatColor.BOLD + "Statistiques FFA")) {
+				e.setCancelled(true);
+			}
+			else if(e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Statistiques Sumo")) {
+				e.setCancelled(true);
+			}
+			else if(e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "" + ChatColor.BOLD + "Statistiques globaux")) {
 				e.setCancelled(true);
 			}
 		}
@@ -538,7 +809,7 @@ public class lobbyItems implements Listener {
 				e.getPlayer().openInventory(shopInv);
 			}
 			else if(e.getItem().equals(friendsHead)) {
-				e.getPlayer().openInventory(accountInv);
+				openAccountInv(e.getPlayer());
 			}
 		}
 	}
