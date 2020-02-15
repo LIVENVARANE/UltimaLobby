@@ -369,7 +369,7 @@ public class lobbyItems implements Listener {
 		ItemMeta accountInvStats = accountInvPaper.getItemMeta();
 		accountInvStats.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Statistiques");
 		List<String> paperLore = new ArrayList<String>();
-		paperLore.add(ChatColor.BLUE + "Voir vos statistiques de jeu.");
+		paperLore.add(ChatColor.GOLD + "Voir vos statistiques de jeu.");
 		accountInvStats.setLore(paperLore);
 		accountInvPaper.setItemMeta(accountInvStats);
 		
@@ -378,7 +378,20 @@ public class lobbyItems implements Listener {
 		SkullMeta fHim = (SkullMeta) accountInvfriendsHead.getItemMeta();
 		fHim.setOwningPlayer(player);
 		fHim.setDisplayName(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Mes amis");
+		List<String> friendsHeadLore = new ArrayList<String>();
+		friendsHeadLore.add(ChatColor.RED + "En cours de développement...");
+		fHim.setLore(friendsHeadLore);
 		accountInvfriendsHead.setItemMeta(fHim);
+		
+		ItemStack accountInvXPBottle = new ItemStack(Material.EXPERIENCE_BOTTLE);
+		ItemMeta accountInvCosm = accountInvXPBottle.getItemMeta();
+		accountInvCosm.setDisplayName(ChatColor.AQUA + "" + ChatColor.BOLD + "Mes cosmétiques");
+		List<String> xpLore = new ArrayList<String>();
+		xpLore.add(ChatColor.BLUE + "Voir tout vos cosmétiques débloqués");
+		xpLore.add(" ");
+		xpLore.add(ChatColor.RED + "En cours de développement...");
+		accountInvCosm.setLore(xpLore);
+		accountInvXPBottle.setItemMeta(accountInvCosm);
 		
 		// creating door item
 		ItemStack menuInvDoor = new ItemStack(Material.SPRUCE_DOOR);
@@ -388,6 +401,7 @@ public class lobbyItems implements Listener {
 			
 		// adding items
 		accountInv.setItem(3, accountInvfriendsHead);
+		accountInv.setItem(4, accountInvXPBottle);
 		accountInv.setItem(5, accountInvPaper);
 		accountInv.setItem(8, menuInvDoor);
 		
@@ -724,7 +738,7 @@ public class lobbyItems implements Listener {
 			ItemMeta accountInvStats = accountInvPaper.getItemMeta();
 			accountInvStats.setDisplayName(ChatColor.YELLOW + "" + ChatColor.BOLD + "Statistiques");
 			List<String> paperLore = new ArrayList<String>();
-			paperLore.add(ChatColor.BLUE + "Voir vos statistiques de jeu.");
+			paperLore.add(ChatColor.GOLD + "Voir vos statistiques de jeu.");
 			accountInvStats.setLore(paperLore);
 			accountInvPaper.setItemMeta(accountInvStats);
 			
@@ -775,6 +789,12 @@ public class lobbyItems implements Listener {
 				e.setCancelled(true);
 			}
 			else if(e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "" + ChatColor.BOLD + "Statistiques globaux")) {
+				e.setCancelled(true);
+			}
+			else if(e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Mes amis")) {
+				e.setCancelled(true);
+			}
+			else if(e.getCurrentItem().getItemMeta().getDisplayName().equals(ChatColor.AQUA + "" + ChatColor.BOLD + "Mes cosmétiques")) {
 				e.setCancelled(true);
 			}
 		}
