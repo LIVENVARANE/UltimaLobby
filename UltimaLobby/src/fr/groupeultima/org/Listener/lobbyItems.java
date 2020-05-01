@@ -17,8 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import fr.groupeultima.Library.IdentityCard.Identity;
-import fr.groupeultima.Library.IdentityCard.Enum.Games;
+import fr.groupeultima.library.identitycard.Identity;
+import fr.groupeultima.library.identitycard.Enum.Games;
 import fr.groupeultima.org.UltimaLobby;
 import net.md_5.bungee.api.ChatColor;
 
