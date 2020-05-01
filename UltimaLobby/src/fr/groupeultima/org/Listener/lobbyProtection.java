@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -36,6 +37,17 @@ public class lobbyProtection implements Listener {
 	public lobbyProtection(UltimaLobby instance)
 	{
 		UltimaLobby = instance;
+	}
+	
+	@EventHandler
+	public void voidTP(PlayerMoveEvent e) {
+		Player p = e.getPlayer();
+		if(p.getWorld() == Bukkit.getServer().getWorld("hub")) {
+			if(p.getLocation().getY() < 0) {
+				p.chat("/hub");
+			}
+		}
+		else { return; }
 	}
 	
 	@EventHandler
